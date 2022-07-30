@@ -45,6 +45,23 @@ Try the following:
 2. If `CONFIG_ZMK_RGB_UNDERGLOW_EXT_POWER=y` is set in [config/murphpad.conf](config/murphpad.conf), turn on RGB. Then try step 1.
 3. Add `&ext_power EP_ON` to your keymap and press the key to *make sure* external power is on. Then try step 2.
 
+### My battery life is so much worse than I expected!
+
+Does it line up with what [ZMK Power Profiler](https://zmk.dev/power-profiler) estimates? Keep in mind that cheaper batteries may not actually have the advertised mAh capacity...
+
+#### Double-check your configuration.
+
+Lowering the values of `CONFIG_ZMK_IDLE_TIMEOUT` and `CONFIG_ZMK_IDLE_SLEEP_TIMEOUT` in [config/murphpad.conf](config/murphpad.conf) will cause the board to enter power-saving modes more quickly.
+
+If you put RGB LEDs on your MurphPad, consider setting `CONFIG_ZMK_RGB_UNDERGLOW_AUTO_OFF_IDLE=y` and/or `CONFIG_ZMK_RGB_UNDERGLOW_AUTO_OFF_USB=y`.
+
+#### Cut power to the external power pin (`VCC`).
+
+This will turn off the RGB LEDs and OLED ([unless otherwise wired](#connect-oled-vcc-to-a-different-power-source)) for the greatest power savings.
+
+1. Add `&ext_power EP_TOG` to [your keymap](config/murphpad.keymap) and press this key to toggle power to the external power pin.
+   - Optionally, set `CONFIG_ZMK_RGB_UNDERGLOW_EXT_POWER=y` in [config/murphpad.conf](config/murphpad.conf), and use `&rgb_ug RGB_TOG` instead.
+
 ### How can I turn off the RGB without turning the OLED off?
 
 Since the RGB LEDs and the OLED are powered by the same pin (`VCC`), both will be turned off if power is cut to that pin. There are two ways to resolve this:
@@ -96,6 +113,20 @@ Later revisions of the MurphPad add jumpers to simplify this process for boards 
 If you don't remember which profile on the MurphPad was used to connect to a specific device, this may mean cycling through each (`&bt BT_PRV`/`&bt BT_NXT`) and clearing them (`&bt BT_CLR`) one by one. [See ZMK's documentation for more info](https://zmk.dev/docs/behaviors/bluetooth#bluetooth-pairing-and-profiles).
 
 As a last resort, try flashing the `settings_reset` firmware for your board; this will force-clear everything.
+
+### The status LED is still blue after flashing my nice!nano.
+
+This means it is still in bootloader mode. Are you 100% sure you flashed it?
+
+#### Make sure the board isn't upside down!
+
+Just like the Pro Micro, the nice!nano is soldered on "face down", so you will not see the chips and other components on it once installed. It won't work any other way!
+
+#### Did you try flashing with [a different board](https://zmk.dev/docs/hardware#onboard) before this?
+
+If you accidentally flashed with firmware for a different *board* like the nice!60 rather than [a *shield* for the nice!nano](https://zmk.dev/docs/hardware#pro_micro), the bootloader may have been overwritten.
+
+Unfortunately, you won't be able to simply reflash with nice!nano firmware and get things back to normal if this is the case. [Follow Nice's instructions to reflash the bootloader](https://nicekeyboards.com/docs/nice-nano/troubleshooting#my-nicenano-seems-to-be-acting-up-and-i-want-to-re-flash-the-bootloader).
 
 ## Further Troubleshooting Resources
 
