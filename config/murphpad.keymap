@@ -11,6 +11,8 @@
 
 #define TIMEOUT 300
 
+&ext_power EP_ON
+
 /* Layer Names*/
 #define DEFAULT 0
 #define FN      1
