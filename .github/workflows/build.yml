@@ -68,3 +68,7 @@ jobs:
             build/zephyr/zmk.hex
             build/zephyr/zmk.uf2
         continue-on-error: true
+
+        include:
+  - board: murphpad
+    snippet: studio-rpc-usb-uart
